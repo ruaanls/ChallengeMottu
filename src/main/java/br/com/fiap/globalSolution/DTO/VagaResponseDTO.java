@@ -1,0 +1,43 @@
+package br.com.fiap.globalSolution.DTO;
+
+import br.com.fiap.globalSolution.entity.StatusVaga;
+
+public class VagaResponseDTO
+{
+    private Long id;
+    private String posicao; // A1, B2, etc.
+    private StatusVaga status;  // livre, ocupada
+    private String placa;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(String posicao) {
+        this.posicao = posicao;
+    }
+
+    public StatusVaga getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusVaga status) {
+        this.status = status;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+}

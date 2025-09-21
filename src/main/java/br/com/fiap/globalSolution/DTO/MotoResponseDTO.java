@@ -8,7 +8,7 @@ public class MotoResponseDTO
     private String modelo;
     private int ano;
     private String cor;
-    private int idVaga;
+    private Long idVaga;
     private String status;
     private String linha;
     private String coluna;
@@ -45,11 +45,11 @@ public class MotoResponseDTO
         this.cor = cor;
     }
 
-    public int getIdVaga() {
+    public Long getIdVaga() {
         return idVaga;
     }
 
-    public void setIdVaga(int idVaga) {
+    public void setIdVaga(Long idVaga) {
         this.idVaga = idVaga;
     }
 

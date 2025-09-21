@@ -3,9 +3,12 @@ package br.com.fiap.globalSolution.service;
 import br.com.fiap.globalSolution.DTO.MotoRequestDTO;
 import br.com.fiap.globalSolution.DTO.MotoResponseDTO;
 import br.com.fiap.globalSolution.entity.Motos;
+import br.com.fiap.globalSolution.entity.StatusVaga;
+import br.com.fiap.globalSolution.entity.Vagas;
 import br.com.fiap.globalSolution.mapper.MotoMapper;
 import br.com.fiap.globalSolution.repository.MotoRepository;
 import br.com.fiap.globalSolution.repository.VagaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,7 @@ import java.util.Optional;
 @Service
 public class MotoService
 {
-    @Autowired
+
     private MotoMapper motoMapper;
     @Autowired
     private MotoRepository motoRepository;
@@ -69,5 +72,40 @@ public class MotoService
         }
 
     }
+
+    @Transactional
+    public MotoResponseDTO moverMotoParaVaga(String placa, Long vagaId) {
+
+        // 1. Busca a moto pela placa
+        Motos moto = this.motoRepository.findMotosByPlaca(placa)
+                .orElseThrow(() -> new RuntimeException("Moto não encontrada com placa: " + placa));
+
+        // 2. Busca a vaga de destino
+        Vagas vagaDestino = this.vagaRepository.findById(vagaId)
+                .orElseThrow(() -> new RuntimeException("Vaga não encontrada com ID: " + vagaId));
+
+        // 3. Verifica se a vaga está livre
+        if (vagaDestino.getStatusVaga() != StatusVaga.LIVRE) {
+            throw new RuntimeException();
+        }
+
+        // 4. Move a moto para a nova vaga
+        moto.setVaga(vagaDestino);
+
+        // 5. Salva as alterações
+        Motos motoAtualizada = this.motoRepository.save(moto);
+
+        MotoResponseDTO motoResponseDTO = this.motoMapper.motoToResponse(motoAtualizada);
+        motoResponseDTO.setColuna(vagaDestino.getColuna());
+        motoResponseDTO.setLinha(vagaDestino.getLinha());
+        motoResponseDTO.setIdVaga(vagaDestino.getId());
+
+
+        // 6. Converte para DTO
+        return motoResponseDTO;
+    }
+
+
+
 
 }

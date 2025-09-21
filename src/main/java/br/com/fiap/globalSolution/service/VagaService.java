@@ -1,21 +1,30 @@
 package br.com.fiap.globalSolution.service;
 
+import br.com.fiap.globalSolution.DTO.LinhaResponseDTO;
 import br.com.fiap.globalSolution.DTO.VagaRequestDTO;
+import br.com.fiap.globalSolution.DTO.VagaResponseDTO;
+import br.com.fiap.globalSolution.entity.Motos;
+import br.com.fiap.globalSolution.entity.StatusVaga;
 import br.com.fiap.globalSolution.entity.Vagas;
 import br.com.fiap.globalSolution.mapper.VagaMapper;
+import br.com.fiap.globalSolution.repository.MotoRepository;
 import br.com.fiap.globalSolution.repository.VagaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class VagaService
 {
-    @Autowired
+
     private VagaMapper vagaMapper;
     @Autowired
     private VagaRepository vagaRepository;
+
+    private MotoRepository motoRepository;
 
     public Vagas createVaga(VagaRequestDTO request)
     {
@@ -48,5 +57,39 @@ public class VagaService
                 .orElseThrow(() -> new RuntimeException("Vaga não encontrada com ID: " + id));
 
         this.vagaRepository.delete(vaga);
+    }
+
+    public LinhaResponseDTO vagasLivres(String linha)
+    {
+        List<Vagas> vagas = this.vagaRepository.findVagasLivresByLinha(linha);
+        LinhaResponseDTO linhaResponseDTO = new LinhaResponseDTO();
+        List<VagaResponseDTO> vagasDTO = new ArrayList<>();
+        int vagasLivres = 0;
+
+        for(Vagas vaga : vagas)
+        {
+            VagaResponseDTO vagaResponse = new VagaResponseDTO();
+            vagaResponse.setId(vaga.getId());
+            vagaResponse.setPosicao(vaga.getLinha()+ vaga.getColuna());
+
+            Optional<Motos> motoNaVaga = this.motoRepository.findByVaga(vaga);
+            if(motoNaVaga.isPresent())
+            {
+                vagaResponse.setStatus(StatusVaga.OCUPADA);
+                vagaResponse.setPlaca(motoNaVaga.get().getPlaca());
+            }
+            else
+            {
+                vagaResponse.setStatus(StatusVaga.LIVRE);
+                vagaResponse.setPlaca(null);
+                vagasLivres++;
+            }
+            vagasDTO.add(vagaResponse);
+
+        }
+        linhaResponseDTO.setLinha(linha);
+        linhaResponseDTO.setVagas(vagasDTO);
+        linhaResponseDTO.setVagasLivres(vagasLivres);
+        return linhaResponseDTO;
     }
 }
