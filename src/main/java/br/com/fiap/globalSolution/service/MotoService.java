@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,6 +104,11 @@ public class MotoService
 
         // 6. Converte para DTO
         return motoResponseDTO;
+    }
+
+    public List<Motos> findAll()
+    {
+        return this.motoRepository.findAll();
     }
 
 

@@ -92,4 +92,9 @@ public class VagaService
         linhaResponseDTO.setVagasLivres(vagasLivres);
         return linhaResponseDTO;
     }
+
+    public List<Vagas> findAll()
+    {
+        return this.vagaRepository.findAll();
+    }
 }
