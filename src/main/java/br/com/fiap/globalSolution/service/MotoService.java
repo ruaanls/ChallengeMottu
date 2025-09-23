@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 public class MotoService
 {
-
+    @Autowired
     private MotoMapper motoMapper;
     @Autowired
     private MotoRepository motoRepository;

@@ -3,8 +3,9 @@ package br.com.fiap.globalSolution.mapper;
 import br.com.fiap.globalSolution.DTO.MotoRequestDTO;
 import br.com.fiap.globalSolution.DTO.MotoResponseDTO;
 import br.com.fiap.globalSolution.entity.Motos;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class MotoMapper
 {
 

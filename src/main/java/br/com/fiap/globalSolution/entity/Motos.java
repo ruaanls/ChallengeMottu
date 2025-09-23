@@ -7,13 +7,13 @@ public class Motos
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String placa;
     private String modelo;
     private int ano;
     private String cor;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vagaId")
+    @JoinColumn(name = "vaga_id", nullable = true)
     private Vagas vaga;
     private String status;
 

@@ -8,7 +8,7 @@ public class MotoRequestDTO
     private String placa;
     @NotBlank(message = "O modelo é obrigatório")
     private String modelo;
-    @NotBlank(message = "O ano é obrigatório")
+
     private int ano;
     @NotBlank(message = "A cor é obrigatória")
     private String cor;
