@@ -10,7 +10,7 @@ public class VagaRequestDTO
     private String linha;
     @NotBlank(message = "A coluna em que a vaga estará é obrigatória")
     private String coluna;
-    private StatusVaga statusVaga;
+    //private StatusVaga statusVaga;
 
     public String getLinha() {
         return linha;
@@ -28,11 +28,5 @@ public class VagaRequestDTO
         this.coluna = coluna;
     }
 
-    public StatusVaga getStatusVaga() {
-        return statusVaga;
-    }
 
-    public void setStatusVaga(StatusVaga statusVaga) {
-        this.statusVaga = statusVaga;
-    }
 }

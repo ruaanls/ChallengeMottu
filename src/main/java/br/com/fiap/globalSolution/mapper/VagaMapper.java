@@ -1,14 +1,17 @@
 package br.com.fiap.globalSolution.mapper;
 
 import br.com.fiap.globalSolution.DTO.VagaRequestDTO;
+import br.com.fiap.globalSolution.entity.StatusVaga;
 import br.com.fiap.globalSolution.entity.Vagas;
+import org.springframework.stereotype.Component;
 
+@Component
 public class VagaMapper
 {
     public Vagas requestToVaga (VagaRequestDTO vagaRequestDTO)
     {
         Vagas vagas = new Vagas();
-        vagas.setStatusVaga(vagaRequestDTO.getStatusVaga());
+        vagas.setStatusVaga(StatusVaga.LIVRE);
         vagas.setColuna(vagaRequestDTO.getColuna());
         vagas.setLinha(vagaRequestDTO.getLinha());
         return vagas;
@@ -22,10 +25,7 @@ public class VagaMapper
         if (request.getColuna() != null) {
             vaga.setColuna(request.getColuna());
         }
-        if(request.getStatusVaga()!= null)
-        {
-            vaga.setStatusVaga(request.getStatusVaga());
-        }
+
 
     }
 }

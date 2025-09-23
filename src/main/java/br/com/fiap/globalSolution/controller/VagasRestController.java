@@ -41,7 +41,7 @@ public class VagasRestController
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{linha}")
+    @GetMapping("/livres/{linha}")
     public ResponseEntity<LinhaResponseDTO> vagasLivres(@PathVariable String linha)
     {
         return new ResponseEntity<>(vagaService.vagasLivres(linha), HttpStatus.OK);

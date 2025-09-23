@@ -41,19 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponseDTO> handleRuntimeException(RuntimeException ex) {
 
-
-
-        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
-                HttpStatus.BAD_REQUEST,
-                "Erro na operação solicitada"
-
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
 
 
 }

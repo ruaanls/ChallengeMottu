@@ -37,7 +37,19 @@ public class MotoService
         Optional<Motos> moto = this.motoRepository.findMotosByPlaca(placa);
         if(moto.isPresent())
         {
-            return this.motoMapper.motoToResponse(moto.get());
+            if(moto.get().getVaga()!= null)
+            {
+                MotoResponseDTO motoResponse = this.motoMapper.motoToResponse(moto.get());
+                motoResponse.setColuna(moto.get().getVaga().getColuna());
+                motoResponse.setLinha(moto.get().getVaga().getLinha());
+                motoResponse.setIdVaga(moto.get().getVaga().getId());
+                return motoResponse;
+            }
+            else
+            {
+                return this.motoMapper.motoToResponse(moto.get());
+            }
+
         }
         else
         {
@@ -92,9 +104,12 @@ public class MotoService
 
         // 4. Move a moto para a nova vaga
         moto.setVaga(vagaDestino);
+        vagaDestino.setStatusVaga(StatusVaga.OCUPADA);
+
 
         // 5. Salva as alterações
         Motos motoAtualizada = this.motoRepository.save(moto);
+        Vagas vagaAtualizada = this.vagaRepository.save(vagaDestino);
 
         MotoResponseDTO motoResponseDTO = this.motoMapper.motoToResponse(motoAtualizada);
         motoResponseDTO.setColuna(vagaDestino.getColuna());

@@ -20,10 +20,12 @@ import java.util.Optional;
 public class VagaService
 {
 
+    @Autowired
     private VagaMapper vagaMapper;
     @Autowired
     private VagaRepository vagaRepository;
 
+    @Autowired
     private MotoRepository motoRepository;
 
     public Vagas createVaga(VagaRequestDTO request)

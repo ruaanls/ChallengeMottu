@@ -2,6 +2,7 @@ package br.com.fiap.globalSolution.controller;
 
 import br.com.fiap.globalSolution.DTO.MotoRequestDTO;
 import br.com.fiap.globalSolution.DTO.MotoResponseDTO;
+import br.com.fiap.globalSolution.DTO.MoverMotoVagaDTO;
 import br.com.fiap.globalSolution.service.MotoService;
 import br.com.fiap.globalSolution.service.VagaService;
 import jakarta.validation.Valid;
@@ -38,13 +39,13 @@ public class MotoRestController
     }
 
     @PostMapping("/moverVaga")
-    public ResponseEntity< MotoResponseDTO> moverMoto(@Valid @RequestBody String placa, Long idVaga) {
-        return new ResponseEntity<>(motoService.moverMotoParaVaga(placa, idVaga),HttpStatus.CREATED);
+    public ResponseEntity< MotoResponseDTO> moverMoto(@Valid @RequestBody MoverMotoVagaDTO request) {
+        return new ResponseEntity<>(motoService.moverMotoParaVaga(request.getPlaca(), request.getIdVaga()),HttpStatus.CREATED);
     }
 
     @GetMapping("/{placa}")
     public ResponseEntity<MotoResponseDTO> buscarMoto(@Valid @PathVariable String placa) {
-        return new ResponseEntity<>(motoService.findMotoByPlaca(placa),HttpStatus.OK);
+        return new ResponseEntity<>(motoService.findMotoByPlaca(placa),HttpStatus.OK) ;
     }
 
 
