@@ -28,7 +28,7 @@ public class VagasRestController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vagas> findVagaById(@PathVariable Long id)
+    public ResponseEntity<VagaResponseDTO> findVagaById(@PathVariable Long id)
     {
         return new ResponseEntity<>(vagaService.findVagaById(id), HttpStatus.OK);
     }

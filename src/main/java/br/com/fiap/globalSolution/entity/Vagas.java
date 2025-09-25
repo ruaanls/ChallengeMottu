@@ -13,6 +13,9 @@ public class Vagas
     @Enumerated(value = EnumType.STRING)
     private StatusVaga statusVaga;
 
+    @OneToOne(mappedBy = "vaga", fetch = FetchType.LAZY)
+    private Motos moto;
+
     public long getId() {
         return id;
     }
@@ -45,5 +48,11 @@ public class Vagas
         this.statusVaga = statusVaga;
     }
 
+    public Motos getMoto() {
+        return moto;
+    }
 
+    public void setMoto(Motos moto) {
+        this.moto = moto;
+    }
 }

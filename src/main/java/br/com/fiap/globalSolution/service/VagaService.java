@@ -47,9 +47,28 @@ public class VagaService
         return this.vagaRepository.save(vaga.get());
     }
 
-    public Vagas findVagaById(Long id) {
-        return this.vagaRepository.findById(id)
+    public VagaResponseDTO findVagaById(Long id) {
+        Vagas vaga = this.vagaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Vaga não encontrada com ID: " + id));
+        VagaResponseDTO vagaResponse = new VagaResponseDTO();
+        vagaResponse.setId(vaga.getId());
+        vagaResponse.setPosicao(vaga.getLinha()+ vaga.getColuna());
+        vagaResponse.setStatus(vaga.getStatusVaga());
+        if(vaga.getMoto() != null)
+        {
+            vagaResponse.setPlaca(vaga.getMoto().getPlaca());
+            vagaResponse.setModelo(vaga.getMoto().getModelo());
+            vagaResponse.setAno(vaga.getMoto().getAno());
+            return vagaResponse;
+        }
+        else
+        {
+            vagaResponse.setPlaca(null);
+            vagaResponse.setModelo(null);
+            vagaResponse.setAno(0);
+        }
+
+        return vagaResponse;
     }
 
 
@@ -79,11 +98,15 @@ public class VagaService
             {
                 vagaResponse.setStatus(StatusVaga.OCUPADA);
                 vagaResponse.setPlaca(motoNaVaga.get().getPlaca());
+                vagaResponse.setModelo(motoNaVaga.get().getModelo());
+                vagaResponse.setAno(motoNaVaga.get().getAno());
             }
             else
             {
                 vagaResponse.setStatus(StatusVaga.LIVRE);
                 vagaResponse.setPlaca(null);
+                vagaResponse.setModelo(null);
+                vagaResponse.setAno(0);
                 vagasLivres++;
             }
             vagasDTO.add(vagaResponse);

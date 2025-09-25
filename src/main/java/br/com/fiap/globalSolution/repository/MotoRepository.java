@@ -12,4 +12,5 @@ public interface MotoRepository extends JpaRepository<Motos,Long>
 {
     Optional<Motos> findMotosByPlaca(String placa);
     Optional<Motos> findByVaga(Vagas vaga);
+
 }

@@ -2,6 +2,7 @@ package br.com.fiap.globalSolution.controller;
 
 import br.com.fiap.globalSolution.DTO.LinhaResponseDTO;
 import br.com.fiap.globalSolution.DTO.VagaRequestDTO;
+import br.com.fiap.globalSolution.DTO.VagaResponseDTO;
 import br.com.fiap.globalSolution.entity.Vagas;
 import br.com.fiap.globalSolution.service.VagaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class VagasController
     @GetMapping("/editar/{id}")
     public String editarVagaForm(@PathVariable Long id, Model model) {
         try {
-            Vagas vaga = vagaService.findVagaById(id);
+            VagaResponseDTO vaga = vagaService.findVagaById(id);
             model.addAttribute("vaga", vaga);
             model.addAttribute("vagaRequest", new VagaRequestDTO());
             return "vagas/editar";
