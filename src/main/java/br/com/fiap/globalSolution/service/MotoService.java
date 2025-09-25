@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,9 +122,35 @@ public class MotoService
         return motoResponseDTO;
     }
 
+
     public List<Motos> findAll()
     {
         return this.motoRepository.findAll();
+    }
+
+    public List<MotoResponseDTO> findAllResponse()
+    {
+
+        List<Motos> moto = this.motoRepository.findAll();
+        List<MotoResponseDTO> motoResponseDTOS = new ArrayList<>();
+        for (Motos moto1 : moto) {
+            MotoResponseDTO dto = this.motoMapper.motoToResponse(moto1);
+            if(moto1.getVaga()!= null)
+            {
+                dto.setColuna(moto1.getVaga().getColuna());
+                dto.setLinha(moto1.getVaga().getLinha());
+                dto.setIdVaga(moto1.getVaga().getId());
+                motoResponseDTOS.add(dto);
+            }
+            else
+            {
+                motoResponseDTOS.add(dto);
+            }
+
+
+        }
+        return motoResponseDTOS;
+
     }
 
 

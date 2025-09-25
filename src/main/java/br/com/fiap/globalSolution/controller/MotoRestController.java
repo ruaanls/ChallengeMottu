@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/motos")
 public class MotoRestController
@@ -46,6 +48,12 @@ public class MotoRestController
     @GetMapping("/{placa}")
     public ResponseEntity<MotoResponseDTO> buscarMoto(@Valid @PathVariable String placa) {
         return new ResponseEntity<>(motoService.findMotoByPlaca(placa),HttpStatus.OK) ;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MotoResponseDTO>> listarTodasMotos ()
+    {
+        return new ResponseEntity<>(this.motoService.findAllResponse(), HttpStatus.OK);
     }
 
 

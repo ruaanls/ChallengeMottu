@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/vagas")
 public class VagasRestController
@@ -46,4 +48,12 @@ public class VagasRestController
     {
         return new ResponseEntity<>(vagaService.vagasLivres(linha), HttpStatus.OK);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Vagas>> findAllVagas()
+    {
+        return new ResponseEntity<>(vagaService.findAll(), HttpStatus.OK);
+    }
+
+
 }

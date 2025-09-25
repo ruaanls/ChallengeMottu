@@ -13,7 +13,7 @@ public class MotoRequestDTO
     @NotBlank(message = "A cor é obrigatória")
     private String cor;
 
-    private int idVaga;
+
     @NotBlank(message = "O status da moto é obrigatório")
     private String status;
 
@@ -49,13 +49,9 @@ public class MotoRequestDTO
         this.cor = cor;
     }
 
-    public int getIdVaga() {
-        return idVaga;
-    }
 
-    public void setIdVaga(int idVaga) {
-        this.idVaga = idVaga;
-    }
+
+
 
     public String getStatus() {
         return status;
