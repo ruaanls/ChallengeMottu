@@ -3,6 +3,7 @@ package br.com.fiap.globalSolution.controller;
 import br.com.fiap.globalSolution.DTO.LinhaResponseDTO;
 import br.com.fiap.globalSolution.DTO.VagaRequestDTO;
 import br.com.fiap.globalSolution.DTO.VagaResponseDTO;
+import br.com.fiap.globalSolution.entity.StatusVaga;
 import br.com.fiap.globalSolution.entity.Vagas;
 import br.com.fiap.globalSolution.service.VagaService;
 import jakarta.validation.Valid;
@@ -54,6 +55,16 @@ public class VagasRestController
     {
         return new ResponseEntity<>(vagaService.findAll(), HttpStatus.OK);
     }
+    
+    @GetMapping("/all/{status}")
+    public ResponseEntity<List<Vagas>> findAllVagas(@PathVariable StatusVaga status)
+    {
+        return new ResponseEntity<>(vagaService.findAllVagasStatus(status), HttpStatus.OK);
+    }
+
+
+
+
 
 
 }

@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine3.21 AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /build
 RUN apk add --no-cache bash
 COPY build.gradle settings.gradle ./

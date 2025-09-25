@@ -99,4 +99,9 @@ public class VagaService
     {
         return this.vagaRepository.findAll();
     }
+
+    public List<Vagas> findAllVagasStatus(StatusVaga statusVaga)
+    {
+        return this.vagaRepository.findByStatusVaga(statusVaga);
+    }
 }

@@ -56,5 +56,11 @@ public class MotoRestController
         return new ResponseEntity<>(this.motoService.findAllResponse(), HttpStatus.OK);
     }
 
+    @PostMapping("/retirarVaga/{placa}")
+    public ResponseEntity<MotoResponseDTO> retirarMoto (@PathVariable String placa)
+    {
+        return new ResponseEntity<>(motoService.retirarMotoDaVaga(placa), HttpStatus.OK);
+    }
+
 
 }

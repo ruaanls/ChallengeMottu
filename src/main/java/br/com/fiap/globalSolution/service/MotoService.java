@@ -122,6 +122,39 @@ public class MotoService
         return motoResponseDTO;
     }
 
+    @Transactional
+    public MotoResponseDTO retirarMotoDaVaga(String placa) {
+
+        // 1. Busca a moto pela placa
+        Motos moto = this.motoRepository.findMotosByPlaca(placa)
+                .orElseThrow(() -> new RuntimeException("Moto não encontrada com placa: " + placa));
+
+        // 2. Verifica se a moto está em alguma vaga
+        Vagas vagaAtual = moto.getVaga();
+        if (vagaAtual == null) {
+            throw new RuntimeException("Moto já não está em nenhuma vaga");
+        }
+
+        // 3. Libera a vaga atual
+        vagaAtual.setStatusVaga(StatusVaga.LIVRE);
+
+        // 4. Remove a moto da vaga
+        moto.setVaga(null);
+
+        // 5. Salva as alterações
+        Motos motoAtualizada = this.motoRepository.save(moto);
+        Vagas vagaLiberada = this.vagaRepository.save(vagaAtual);
+
+        // 6. Converte para DTO (sem informações da vaga)
+        MotoResponseDTO motoResponseDTO = this.motoMapper.motoToResponse(motoAtualizada);
+        motoResponseDTO.setColuna(null);
+        motoResponseDTO.setLinha(null);
+        motoResponseDTO.setIdVaga(null);
+
+        return motoResponseDTO;
+    }
+
+
 
     public List<Motos> findAll()
     {
@@ -152,8 +185,6 @@ public class MotoService
         return motoResponseDTOS;
 
     }
-
-
 
 
 }
