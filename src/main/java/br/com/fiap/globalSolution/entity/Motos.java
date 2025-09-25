@@ -12,7 +12,7 @@ public class Motos
     private String modelo;
     private int ano;
     private String cor;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vaga_id", nullable = true)
     private Vagas vaga;
     private String status;
