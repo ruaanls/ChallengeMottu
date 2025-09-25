@@ -126,8 +126,10 @@ public class MotoService
     public MotoResponseDTO retirarMotoDaVaga(String placa) {
 
         // 1. Busca a moto pela placa
+        placa = placa.toUpperCase();
+        String finalPlaca = placa;
         Motos moto = this.motoRepository.findMotosByPlaca(placa)
-                .orElseThrow(() -> new RuntimeException("Moto não encontrada com placa: " + placa));
+                .orElseThrow(() -> new RuntimeException("Moto não encontrada com placa: " + finalPlaca));
 
         // 2. Verifica se a moto está em alguma vaga
         Vagas vagaAtual = moto.getVaga();
@@ -179,12 +181,11 @@ public class MotoService
             {
                 motoResponseDTOS.add(dto);
             }
-
-
         }
         return motoResponseDTOS;
 
     }
+
 
 
 }
