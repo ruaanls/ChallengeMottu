@@ -1,9 +1,13 @@
 package br.com.fiap.globalSolution.mapper;
 
 import br.com.fiap.globalSolution.DTO.VagaRequestDTO;
+import br.com.fiap.globalSolution.DTO.VagaResponseDTO;
 import br.com.fiap.globalSolution.entity.StatusVaga;
 import br.com.fiap.globalSolution.entity.Vagas;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class VagaMapper
@@ -28,4 +32,27 @@ public class VagaMapper
 
 
     }
+
+    public List<VagaResponseDTO> vagaToResponse(List<Vagas> vagas)
+    {
+        List<VagaResponseDTO> vagasDTO = new ArrayList<>();
+        for(Vagas vaga : vagas)
+        {
+            VagaResponseDTO vagaResponse = new VagaResponseDTO();
+            vagaResponse.setId(vaga.getId());
+            vagaResponse.setPosicao(vaga.getLinha()+ vaga.getColuna());
+            vagaResponse.setStatus(vaga.getStatusVaga());
+            if(vaga.getMoto() != null)
+            {
+                vagaResponse.setPlaca(vaga.getMoto().getPlaca());
+                vagaResponse.setModelo(vaga.getMoto().getModelo());
+                vagaResponse.setAno(vaga.getMoto().getAno());
+                vagaResponse.setCor(vaga.getMoto().getCor());
+                vagaResponse.setStatusMoto(vaga.getMoto().getStatus());
+            }
+            vagasDTO.add(vagaResponse);
+        }
+        return vagasDTO;
+    }
+
 }

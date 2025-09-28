@@ -51,13 +51,13 @@ public class VagasRestController
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Vagas>> findAllVagas()
+    public ResponseEntity<List<VagaResponseDTO>> findAllVagas()
     {
         return new ResponseEntity<>(vagaService.findAll(), HttpStatus.OK);
     }
     
     @GetMapping("/all/{status}")
-    public ResponseEntity<List<Vagas>> findAllVagas(@PathVariable StatusVaga status)
+    public ResponseEntity<List<VagaResponseDTO>> findAllVagas(@PathVariable StatusVaga status)
     {
         return new ResponseEntity<>(vagaService.findAllVagasStatus(status), HttpStatus.OK);
     }

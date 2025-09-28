@@ -24,7 +24,7 @@ public class VagasController
     // ✅ Página inicial - Lista todas as vagas
     @GetMapping
     public String listarVagas(Model model) {
-        List<Vagas> vagas = vagaService.findAll();
+        List<VagaResponseDTO> vagas = vagaService.findAll();
         model.addAttribute("vagas", vagas);
         return "vagas/lista";
     }

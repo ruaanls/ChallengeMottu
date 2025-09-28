@@ -141,13 +141,16 @@ public class VagaService
         return linhaResponseDTO;
     }
 
-    public List<Vagas> findAll()
+    public List<VagaResponseDTO> findAll()
     {
-        return this.vagaRepository.findAll();
+        List<Vagas> vagasList = this.vagaRepository.findAll();
+        return this.vagaMapper.vagaToResponse(vagasList);
+
     }
 
-    public List<Vagas> findAllVagasStatus(StatusVaga statusVaga)
+    public List<VagaResponseDTO> findAllVagasStatus(StatusVaga statusVaga)
     {
-        return this.vagaRepository.findByStatusVaga(statusVaga);
+        List<Vagas> vagasList = this.vagaRepository.findByStatusVaga(statusVaga);
+        return this.vagaMapper.vagaToResponse(vagasList);
     }
 }
