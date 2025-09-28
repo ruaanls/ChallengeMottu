@@ -5,6 +5,8 @@ import br.com.fiap.globalSolution.DTO.MotoResponseDTO;
 import br.com.fiap.globalSolution.entity.Motos;
 import br.com.fiap.globalSolution.entity.StatusVaga;
 import br.com.fiap.globalSolution.entity.Vagas;
+import br.com.fiap.globalSolution.exception.MotoOrVagaDontExists;
+import br.com.fiap.globalSolution.exception.MotoOrVagaExistsException;
 import br.com.fiap.globalSolution.mapper.MotoMapper;
 import br.com.fiap.globalSolution.repository.MotoRepository;
 import br.com.fiap.globalSolution.repository.VagaRepository;
@@ -29,8 +31,16 @@ public class MotoService
     public MotoResponseDTO createMoto (MotoRequestDTO request)
     {
         Motos moto = this.motoMapper.requestToMoto(request);
-        moto = this.motoRepository.save(moto);
-        return this.motoMapper.motoToResponse(moto);
+        if(this.motoRepository.findMotosByPlaca(request.getPlaca().toUpperCase()).isPresent())
+        {
+            throw new MotoOrVagaExistsException("A moto com a placa: "+ request.getPlaca()+ " já existe por favor crie uma nova moto com uma placa diferente");
+        }
+        else
+        {
+            moto = this.motoRepository.save(moto);
+            return this.motoMapper.motoToResponse(moto);
+        }
+
     }
 
     public MotoResponseDTO findMotoByPlaca(String placa)
@@ -54,7 +64,7 @@ public class MotoService
         }
         else
         {
-            throw new RuntimeException();
+            throw new MotoOrVagaDontExists("A moto com a placa: "+ placa+ " não existe em nossa base de dados por favor informe uma placa válida!");
         }
     }
 
@@ -67,7 +77,7 @@ public class MotoService
         }
         else
         {
-            throw new RuntimeException();
+            throw new MotoOrVagaDontExists("A moto com a placa: "+ placa+ " não existe em nossa base de dados por favor informe uma placa válida!");
         }
     }
 
@@ -82,7 +92,7 @@ public class MotoService
         }
         else
         {
-            throw new RuntimeException();
+            throw new MotoOrVagaDontExists("A moto com a placa: "+ placa+ " não existe em nossa base de dados por favor informe uma placa válida!");
         }
 
     }
@@ -92,11 +102,11 @@ public class MotoService
 
         // 1. Busca a moto pela placa
         Motos moto = this.motoRepository.findMotosByPlaca(placa)
-                .orElseThrow(() -> new RuntimeException("Moto não encontrada com placa: " + placa));
+                .orElseThrow(() -> new MotoOrVagaDontExists("A moto com a placa: "+ placa+ " não existe em nossa base de dados por favor informe uma placa válida!"));
 
         // 2. Busca a vaga de destino
         Vagas vagaDestino = this.vagaRepository.findById(vagaId)
-                .orElseThrow(() -> new RuntimeException("Vaga não encontrada com ID: " + vagaId));
+                .orElseThrow(() -> new MotoOrVagaDontExists("A vaga com o id: "+ vagaId+ " não existe por favor forneça um id existente"));
 
         // 3. Verifica se a vaga está livre
         if (vagaDestino.getStatusVaga() != StatusVaga.LIVRE) {
@@ -106,6 +116,7 @@ public class MotoService
         // 4. Move a moto para a nova vaga
         moto.setVaga(vagaDestino);
         vagaDestino.setStatusVaga(StatusVaga.OCUPADA);
+        vagaDestino.setMoto(moto);
 
 
         // 5. Salva as alterações
@@ -129,14 +140,15 @@ public class MotoService
         placa = placa.toUpperCase();
         String finalPlaca = placa;
         Motos moto = this.motoRepository.findMotosByPlaca(placa)
-                .orElseThrow(() -> new RuntimeException("Moto não encontrada com placa: " + finalPlaca));
+                .orElseThrow(() -> new MotoOrVagaDontExists("A moto com a placa: "+ finalPlaca + " não está em nenhuma vaga atualmente"));
 
         // 2. Verifica se a moto está em alguma vaga
         Vagas vagaAtual = moto.getVaga();
         if (vagaAtual == null) {
-            throw new RuntimeException("Moto já não está em nenhuma vaga");
+            throw new MotoOrVagaDontExists("A moto com a placa: "+ placa + " não está em nenhuma vaga atualmente");
         }
 
+        
         // 3. Libera a vaga atual
         vagaAtual.setStatusVaga(StatusVaga.LIVRE);
 

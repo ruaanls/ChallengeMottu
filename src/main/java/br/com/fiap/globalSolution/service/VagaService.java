@@ -6,6 +6,8 @@ import br.com.fiap.globalSolution.DTO.VagaResponseDTO;
 import br.com.fiap.globalSolution.entity.Motos;
 import br.com.fiap.globalSolution.entity.StatusVaga;
 import br.com.fiap.globalSolution.entity.Vagas;
+import br.com.fiap.globalSolution.exception.MotoOrVagaDontExists;
+import br.com.fiap.globalSolution.exception.MotoOrVagaExistsException;
 import br.com.fiap.globalSolution.mapper.VagaMapper;
 import br.com.fiap.globalSolution.repository.MotoRepository;
 import br.com.fiap.globalSolution.repository.VagaRepository;
@@ -31,6 +33,10 @@ public class VagaService
     public Vagas createVaga(VagaRequestDTO request)
     {
         Vagas vaga =  this.vagaMapper.requestToVaga(request);
+        if(this.vagaRepository.findById(vaga.getId()).isPresent())
+        {
+            throw new MotoOrVagaExistsException("A vaga com o a coluna e linha: "+ request.getColuna()+ request.getLinha()+ " já existe por favor crie uma nova vaga com uma coluna e linha diferentes");
+        }
         vaga = this.vagaRepository.save(vaga);
         return vaga;
     }
@@ -39,17 +45,25 @@ public class VagaService
     public Vagas updateVaga(Long id, VagaRequestDTO request) {
 
         Optional<Vagas> vaga = this.vagaRepository.findById(id);
+        if(vaga.isEmpty())
+        {
+            throw new MotoOrVagaDontExists("Vaga com o id: "+ id+ " não existe em nossa base de dados por favor passe um id existente e válido");
+        }
+        else
+        {
+            this.vagaMapper.updateVagaFromRequest(request, vaga.get());
 
 
-        this.vagaMapper.updateVagaFromRequest(request, vaga.get());
+            return this.vagaRepository.save(vaga.get());
+        }
 
 
-        return this.vagaRepository.save(vaga.get());
+
     }
 
     public VagaResponseDTO findVagaById(Long id) {
         Vagas vaga = this.vagaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vaga não encontrada com ID: " + id));
+                .orElseThrow(() -> new MotoOrVagaDontExists("A vaga com o id: "+ id+ " não existe por favor forneça um id existente"));
         VagaResponseDTO vagaResponse = new VagaResponseDTO();
         vagaResponse.setId(vaga.getId());
         vagaResponse.setPosicao(vaga.getLinha()+ vaga.getColuna());
@@ -80,7 +94,7 @@ public class VagaService
 
     public void deleteVaga(Long id) {
         Vagas vaga = this.vagaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vaga não encontrada com ID: " + id));
+                .orElseThrow(() -> new MotoOrVagaDontExists("Vaga não encontrada com ID: " + id));
 
         this.vagaRepository.delete(vaga);
     }
