@@ -59,8 +59,7 @@ public class MotoController
         try {
             MotoResponseDTO moto = motoService.findMotoByPlaca(placa);
             model.addAttribute("moto", moto);
-            model.addAttribute("motoRequest", new MotoRequestDTO());
-            return "motos/editar";
+            return "motos/formulario";
         } catch (Exception e) {
             model.addAttribute("erro", "Moto não encontrada");
             return "redirect:/motos";
@@ -93,27 +92,42 @@ public class MotoController
         return "redirect:/motos";
     }
 
-    // ✅ Formulário para mover moto
-    @GetMapping("/mover/{linha}")
-    public String moverMotoForm(@PathVariable String linha , Model model) {
-        // Lista vagas livres para o select
-        LinhaResponseDTO vagasLivres = vagaService.vagasLivres(linha);
-        model.addAttribute("vagasLivres", vagasLivres);
-        return "motos/mover";
+    // Exibe formulário para mover moto para vaga
+    @GetMapping("/mover/{placa}")
+    public String moverMotoForm(@PathVariable String placa, Model model) {
+        try {
+            MotoResponseDTO moto = motoService.findMotoByPlaca(placa);
+            // Buscar todas as vagas livres
+            var vagasLivres = vagaService.vagasLivres();
+            model.addAttribute("moto", moto);
+            model.addAttribute("vagasLivres", vagasLivres);
+            return "motos/mover";
+        } catch (Exception e) {
+            model.addAttribute("erro", "Moto não encontrada ou erro ao buscar vagas.");
+            return "redirect:/motos";
+        }
     }
 
-    // ✅ Processar movimentação da moto
-    @PostMapping("/mover")
-    public String moverMoto(@RequestParam String placa,
-                            @RequestParam Long vagaId,
-                            RedirectAttributes redirectAttributes) {
+    // Processa movimentação da moto para vaga
+    @PostMapping("/mover/{placa}")
+    public String moverMoto(@PathVariable String placa, @RequestParam Long vagaId, RedirectAttributes redirectAttributes) {
         try {
-            MotoResponseDTO resultado = motoService.moverMotoParaVaga(placa, vagaId);
-            redirectAttributes.addFlashAttribute("sucesso",
-                    "Moto " + resultado.getPlaca() + " movida para vaga " +
-                            resultado.getLinha() + resultado.getColuna() + " com sucesso!");
+            motoService.moverMotoParaVaga(placa, vagaId);
+            redirectAttributes.addFlashAttribute("sucesso", "Moto movida para vaga com sucesso!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("erro", "Erro ao mover moto: " + e.getMessage());
+        }
+        return "redirect:/motos";
+    }
+
+    // Retirar moto da vaga
+    @GetMapping("/retirar/{placa}")
+    public String retirarMotoDaVaga(@PathVariable String placa, RedirectAttributes redirectAttributes) {
+        try {
+            motoService.retirarMotoDaVaga(placa);
+            redirectAttributes.addFlashAttribute("sucesso", "Moto retirada da vaga com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro", "Erro ao retirar moto da vaga: " + e.getMessage());
         }
         return "redirect:/motos";
     }

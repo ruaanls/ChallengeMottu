@@ -153,4 +153,9 @@ public class VagaService
         List<Vagas> vagasList = this.vagaRepository.findByStatusVaga(statusVaga);
         return this.vagaMapper.vagaToResponse(vagasList);
     }
+
+    public List<VagaResponseDTO> vagasLivres() {
+        List<Vagas> vagas = vagaRepository.findByStatusVaga(StatusVaga.LIVRE);
+        return vagaMapper.vagaToResponse(vagas);
+    }
 }

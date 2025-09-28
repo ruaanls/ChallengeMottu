@@ -56,7 +56,7 @@ public class VagasController
             VagaResponseDTO vaga = vagaService.findVagaById(id);
             model.addAttribute("vaga", vaga);
             model.addAttribute("vagaRequest", new VagaRequestDTO());
-            return "vagas/editar";
+            return "vagas/formulario";
         } catch (Exception e) {
             model.addAttribute("erro", "Vaga não encontrada");
             return "redirect:/vagas";
