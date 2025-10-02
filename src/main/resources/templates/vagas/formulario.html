@@ -7,10 +7,10 @@
     <div class="container">
         <h2 th:text="${vaga != null} ? 'Editar Vaga' : 'Cadastrar Nova Vaga'"></h2>
         <form th:action="${vaga != null} ? @{'/vagas/editar/' + ${vaga.id}} : @{/vagas/criar}" method="post">
-            <label>Posição (ex: A1, B2):</label>
-            <input type="text" name="posicao" th:value="${vaga?.posicao}" required/>
-            <label>Status:</label>
-            <input type="text" name="status" th:value="${vaga?.status}" required/>
+            <label>Linha:</label>
+            <input type="text" name="linha" th:value="${vagaRequest.linha}" required/>
+            <label>Coluna:</label>
+            <input type="text" name="coluna" th:value="${vagaRequest.coluna}" required/>
             <button class="btn" type="submit">Salvar</button>
             <a class="btn" href="/vagas">Cancelar</a>
         </form>

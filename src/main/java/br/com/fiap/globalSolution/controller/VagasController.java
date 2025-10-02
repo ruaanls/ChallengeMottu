@@ -54,8 +54,15 @@ public class VagasController
     public String editarVagaForm(@PathVariable Long id, Model model) {
         try {
             VagaResponseDTO vaga = vagaService.findVagaById(id);
+            VagaRequestDTO vagaRequest = new VagaRequestDTO();
+            // Extrair linha e coluna da posição (ex: A1 -> linha=A, coluna=1)
+            String posicao = vaga.getPosicao();
+            if (posicao != null && posicao.length() >= 2) {
+                vagaRequest.setLinha(posicao.substring(0, 1));
+                vagaRequest.setColuna(posicao.substring(1));
+            }
             model.addAttribute("vaga", vaga);
-            model.addAttribute("vagaRequest", new VagaRequestDTO());
+            model.addAttribute("vagaRequest", vagaRequest);
             return "vagas/formulario";
         } catch (Exception e) {
             model.addAttribute("erro", "Vaga não encontrada");
