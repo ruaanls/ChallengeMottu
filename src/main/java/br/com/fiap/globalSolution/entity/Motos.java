@@ -12,10 +12,17 @@ public class Motos
     private String modelo;
     private int ano;
     private String cor;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vaga_id", nullable = true)
     private Vagas vaga;
+
     private String status;
+
+    // Novo relacionamento: Moto pertence a um usuário
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proprietario_id", nullable = true)
+    private UserJpa proprietario;
 
     public long getId() {
         return id;
@@ -71,5 +78,17 @@ public class Motos
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public UserJpa getProprietario() {
+        return proprietario;
+    }
+
+    public void setProprietario(UserJpa proprietario) {
+        this.proprietario = proprietario;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
