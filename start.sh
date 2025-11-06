@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "🚀 Iniciando Kafka..."
 /opt/kafka/bin/zookeeper-server-start.sh -daemon /opt/kafka/config/zookeeper.properties
 sleep 5
