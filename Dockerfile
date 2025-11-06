@@ -1,3 +1,4 @@
+#ETAPA 1 JAVA -- FUNCIONANDO 100%
 FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /build
 RUN apk add --no-cache bash
@@ -9,7 +10,7 @@ RUN ./gradlew dependencies --no-daemon --quiet
 COPY ./src ./src
 RUN ./gradlew build --no-daemon -x test --quiet
 
-# Etapa 2: imagem final com Kafka + aplicação Java
+# Etapa 2: imagem final com Kafka + aplicação Java FUNCIONANDO 100%
 FROM amazoncorretto:21-alpine3.21
 WORKDIR /app
 
