@@ -18,6 +18,11 @@ public class MotoMapper
         motos.setPlaca(motoRequestDTO.getPlaca());
         motos.setStatus(motoRequestDTO.getStatus());
         motos.setAno(motoRequestDTO.getAno());
+        if(motoRequestDTO.getEmail().isEmpty())
+        {
+            motos.setEmail(motoRequestDTO.getEmail());
+            motos.setCpf(motoRequestDTO.getCpf());
+        }
         return motos;
     }
 
@@ -29,6 +34,7 @@ public class MotoMapper
         motoResponse.setModelo(moto.getModelo());
         motoResponse.setPlaca(moto.getPlaca());
         motoResponse.setStatus(moto.getStatus());
+
         return motoResponse;
     }
 
@@ -46,6 +52,12 @@ public class MotoMapper
         }
         if (motoRequestDTO.getStatus() != null) {
             moto.setStatus(motoRequestDTO.getStatus());
+        }
+        if (motoRequestDTO.getEmail() != null) {
+            moto.setEmail(motoRequestDTO.getEmail());
+        }
+        if (motoRequestDTO.getCpf() != null) {
+            moto.setCpf(motoRequestDTO.getCpf());
         }
 
     }

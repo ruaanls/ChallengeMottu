@@ -17,7 +17,10 @@ public class MotoRequestDTO
     @NotBlank(message = "O status da moto é obrigatório")
     private String status;
 
+
     private String cpf;
+
+    private String email;
 
     public String getPlaca() {
         return placa;
@@ -69,5 +72,13 @@ public class MotoRequestDTO
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -33,10 +33,6 @@ public class VagaService
     public Vagas createVaga(VagaRequestDTO request)
     {
         Vagas vaga =  this.vagaMapper.requestToVaga(request);
-        if(this.vagaRepository.findById(vaga.getId()).isPresent())
-        {
-            throw new MotoOrVagaExistsException("A vaga com o a coluna e linha: "+ request.getColuna()+ request.getLinha()+ " já existe por favor crie uma nova vaga com uma coluna e linha diferentes");
-        }
         vaga = this.vagaRepository.save(vaga);
         return vaga;
     }
@@ -52,8 +48,6 @@ public class VagaService
         else
         {
             this.vagaMapper.updateVagaFromRequest(request, vaga.get());
-
-
             return this.vagaRepository.save(vaga.get());
         }
 

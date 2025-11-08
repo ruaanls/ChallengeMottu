@@ -19,10 +19,9 @@ public class Motos
 
     private String status;
 
-    // Novo relacionamento: Moto pertence a um usuário
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proprietario_id", nullable = true)
-    private UserJpa proprietario;
+    private String cpf;
+
+    private String email;
 
     public long getId() {
         return id;
@@ -80,15 +79,23 @@ public class Motos
         this.status = status;
     }
 
-    public UserJpa getProprietario() {
-        return proprietario;
-    }
-
-    public void setProprietario(UserJpa proprietario) {
-        this.proprietario = proprietario;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -1,19 +1,18 @@
 package br.com.fiap.globalSolution.service;
 
-import br.com.fiap.globalSolution.DTO.MotoEvent;
 import br.com.fiap.globalSolution.DTO.MotoRequestDTO;
 import br.com.fiap.globalSolution.DTO.MotoResponseDTO;
 import br.com.fiap.globalSolution.entity.Motos;
 import br.com.fiap.globalSolution.entity.StatusVaga;
-import br.com.fiap.globalSolution.entity.UserJpa;
+
 import br.com.fiap.globalSolution.entity.Vagas;
 import br.com.fiap.globalSolution.exception.MotoOrVagaDontExists;
 import br.com.fiap.globalSolution.exception.MotoOrVagaExistsException;
 import br.com.fiap.globalSolution.mapper.MotoMapper;
-import br.com.fiap.globalSolution.repository.JpaUserRepository;
+
 import br.com.fiap.globalSolution.repository.MotoRepository;
 import br.com.fiap.globalSolution.repository.VagaRepository;
-import br.com.fiap.globalSolution.security.KafkaMessageProducer;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,9 +33,7 @@ public class MotoService
     @Autowired
     private VagaRepository vagaRepository;
 
-    private KafkaMessageProducer kafkaMessageProducer;
 
-    private JpaUserRepository jpaUserRepository;
 
     public MotoResponseDTO createMoto (MotoRequestDTO request)
     {
@@ -47,17 +44,9 @@ public class MotoService
         }
         else
         {
-            if(this.jpaUserRepository.findUserJpaByCpf(request.getCpf()).isPresent())
-            {
-                UserJpa usuario = this.jpaUserRepository.findUserJpaByCpf(request.getCpf()).get();
-                moto.setProprietario(usuario);
-                moto = this.motoRepository.save(moto);
-                return this.motoMapper.motoToResponse(moto);
-            }
-            else
-            {
-                throw new RuntimeException();
-            }
+            moto = this.motoRepository.save(moto);
+            return this.motoMapper.motoToResponse(moto);
+            
         }
 
     }
@@ -147,22 +136,7 @@ public class MotoService
         motoResponseDTO.setLinha(vagaDestino.getLinha());
         motoResponseDTO.setIdVaga(vagaDestino.getId());
 
-        LocalDateTime agora = LocalDateTime.now();
 
-        // Define o formato desejado
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        String horario = formato.toString();
-
-        MotoEvent motoEvent = new MotoEvent();
-        motoEvent.setAcao("ENTRADA");
-        motoEvent.setNomeMoto(motoAtualizada.getModelo());
-        motoEvent.setPlaca(motoAtualizada.getPlaca());
-        motoEvent.setCorredorColuna(vagaAtualizada.getLinha()+ vagaAtualizada.getColuna());
-        motoEvent.setHorario(horario);
-        motoEvent.setEmail(motoAtualizada.getProprietario().getEmail());
-        motoEvent.setNome(motoAtualizada.getProprietario().getNome_completo());
-        this.kafkaMessageProducer.sendMotoEntrada(motoEvent,"motoentrada");
-        // 6. Converte para DTO
         return motoResponseDTO;
     }
 
@@ -199,22 +173,6 @@ public class MotoService
         motoResponseDTO.setLinha(null);
         motoResponseDTO.setIdVaga(null);
 
-        LocalDateTime agora = LocalDateTime.now();
-
-        // Define o formato desejado
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        String horario = formato.toString();
-
-
-        MotoEvent motoEvent = new MotoEvent();
-        motoEvent.setAcao("ENTRADA");
-        motoEvent.setNomeMoto(motoAtualizada.getModelo());
-        motoEvent.setPlaca(motoAtualizada.getPlaca());
-        motoEvent.setCorredorColuna(vagaAntiga.get().getLinha()+ vagaAntiga.get().getColuna());
-        motoEvent.setHorario(horario);
-        motoEvent.setEmail(motoAtualizada.getProprietario().getEmail());
-        motoEvent.setNome(motoAtualizada.getProprietario().getNome_completo());
-        this.kafkaMessageProducer.sendMotoEntrada(motoEvent,"motoentrada");
         return motoResponseDTO;
     }
 

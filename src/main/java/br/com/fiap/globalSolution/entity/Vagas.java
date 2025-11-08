@@ -10,7 +10,9 @@ public class Vagas
     private long id;
     private String linha;
     private String coluna;
+
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "status_vaga")
     private StatusVaga statusVaga;
 
     @OneToOne(mappedBy = "vaga", fetch = FetchType.LAZY)
