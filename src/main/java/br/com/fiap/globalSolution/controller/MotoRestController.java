@@ -50,6 +50,8 @@ public class MotoRestController
         return new ResponseEntity<>(motoService.findMotoByPlaca(placa),HttpStatus.OK) ;
     }
 
+
+
     @GetMapping("/all")
     public ResponseEntity<List<MotoResponseDTO>> listarTodasMotos ()
     {
